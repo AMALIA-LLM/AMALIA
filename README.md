@@ -1,6 +1,6 @@
-# AMALIA LLM
+# AMALIA 
 
-**AMALIA LLM** is a fully open Large Language Model for European Portuguese.
+**AMALIA** is a fully open Large Language Model for European Portuguese.
 
 This repository serves as a central entry point for resources related to the paper:
 
