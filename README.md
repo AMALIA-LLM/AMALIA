@@ -11,7 +11,8 @@
 
 [![Website](https://img.shields.io/badge/Website-amaliallm.pt-blue)](https://amaliallm.pt/)
 [![HuggingFace](https://img.shields.io/badge/🤗%20HuggingFace-amalia--llm-yellow)](https://huggingface.co/amalia-llm)
-[![Paper](https://img.shields.io/badge/Paper-Technical%20Report-red?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.26511)
+[![Paper](https://img.shields.io/badge/Paper-AMALIA--LLM-red?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2603.26511)
+[![Paper](https://img.shields.io/badge/Paper-AMALIA--VL-red?logo=arxiv&logoColor=white)](https://arxiv.org/abs/2606.19100)
  
 </div>
 
