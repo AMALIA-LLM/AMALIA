@@ -105,8 +105,7 @@ With the model served with vLLM, it can be queried on a terminal shell using `cu
 curl -X POST http://localhost:8000/v1/chat/completions \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer api_key" \
-    --data ’{"model": "amalia-llm/AMALIA-9B-0626-DPO", \
-    "messages": [{"role": "user", "content": "Olá"}]}’
+    --data '{"model": "amalia-llm/AMALIA-9B-0626-DPO", "messages": [{"role": "user", "content": "Olá"}]}'
 ~~~
 This example sends the query "Olá" to AMALIA and displays the model's answer. 
 
@@ -144,9 +143,9 @@ Using the python `openai` library is as following:
 ~~~python
 from openai import OpenAI
 
-url = "http://localhost:8000/v1/chat/completions"
+url = "http://localhost:8000/v1"
 
-client = OpenAI(base_url=url, api_key='')
+client = OpenAI(base_url=url, api_key="EMPTY")
 
 messages = [
     {
@@ -166,18 +165,22 @@ print(answer)
 
 ### Interacting with the AMALIA-VL
 
-AMALIA also has been developed both in language-only and vison-language variants. In order to interact with the VLM variant, first serve the vision-language variant, here we will use `amalia-llm/AMALIA-VL-DPO`. After serving with the command above, the model will be at http://localhost:8000, and we can interact with it, like before, either on the terminal via `curl` or using a Python script using the `requests` or `openai` libraries.
+To use AMALIA-VL, serve the vision-language model with `vllm serve amalia-llm/AMALIA-VL-DPO`. By default, the API is available at `http://localhost:8000`. The examples below use a public image URL.
 
 ```shell
-# curl
-
-curl -X POST http://127.0.0.1:8001/v1/chat/completions \
-       -H "Content-Type: application/json" \
-       -H "Authorization: Bearer api_key" \
-       --data '{"model": "amalia-llm/AMALIA-VL-DPO", \
-       "messages": [{"role": "user", "content": \
-        [{"type": "image","image": "path/to/image.png"}, \
-        {"type": "text","text": "O que está nesta imagem?"}]}]}'
+curl -X POST http://localhost:8000/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer api_key" \
+    --data '{
+      "model": "amalia-llm/AMALIA-VL-DPO",
+      "messages": [{
+        "role": "user",
+        "content": [
+          {"type": "image_url", "image_url": {"url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg"}},
+          {"type": "text", "text": "O que está nesta imagem?"}
+        ]
+      }]
+    }'
 ```
 
 ```python
@@ -185,7 +188,7 @@ curl -X POST http://127.0.0.1:8001/v1/chat/completions \
 
 import requests
 
-url = "http://127.0.0.1:8001/v1/chat/completions"
+url = "http://localhost:8000/v1/chat/completions"
 
 headers = {
     "Content-Type": "application/json",
@@ -198,14 +201,8 @@ payload = {
         {
             "role": "user",
             "content": [
-                {
-                    "type": "image",
-                    "image": "path/to/image.png"
-                },
-                {
-                    "type": "text",
-                    "text": "O que está nesta imagem?"
-                }
+                {"type": "image_url", "image_url": {"url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg"}},
+                {"type": "text", "text": "O que está nesta imagem?"}
             ]
         }
     ]
@@ -224,28 +221,20 @@ else:
 
 from openai import OpenAI
 
-url = "http://localhost:8000/v1/chat/completions"
-
-client = OpenAI(base_url=url, api_key='')
+client = OpenAI(base_url="http://localhost:8000/v1", api_key="EMPTY")
 
 messages = [
     {
-        'role': 'user', 
+        "role": "user",
         "content": [
-            {
-                "type": "image",
-                "image": "path/to/image.png"
-            },
-            {
-                "type": "text",
-                "text": "O que está nesta imagem?"
-            }
+            {"type": "image_url", "image_url": {"url": "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/bee.jpg"}},
+            {"type": "text", "text": "O que está nesta imagem?"}
         ]
     }
 ]
 
 outputs = client.chat.completions.create(
-    model="amalia-llm/AMALIA-9B-0626-DPO",
+    model="amalia-llm/AMALIA-VL-DPO",
     messages=messages,
 )
 answer = outputs.choices[0].message.content.strip()
